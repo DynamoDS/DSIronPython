@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSIronPython", "DSIronPython\DSIronPython.csproj", "{F6617EBE-7D20-4A62-9ECD-DFBB0E3792B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSIronPython", "DSIronPython\DSIronPython.csproj", "{9EEF4F42-6B3B-4358-9A8A-C2701539A822}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronPythonExtension", "IronPythonExtension\IronPythonExtension.csproj", "{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronPythonTests", "IronPythonTests\IronPythonTests.csproj", "{E6DF2FBD-7D4D-4465-94DC-D576D737E985}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F6617EBE-7D20-4A62-9ECD-DFBB0E3792B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6617EBE-7D20-4A62-9ECD-DFBB0E3792B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F6617EBE-7D20-4A62-9ECD-DFBB0E3792B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F6617EBE-7D20-4A62-9ECD-DFBB0E3792B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EEF4F42-6B3B-4358-9A8A-C2701539A822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EEF4F42-6B3B-4358-9A8A-C2701539A822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EEF4F42-6B3B-4358-9A8A-C2701539A822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EEF4F42-6B3B-4358-9A8A-C2701539A822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6DF2FBD-7D4D-4465-94DC-D576D737E985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6DF2FBD-7D4D-4465-94DC-D576D737E985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6DF2FBD-7D4D-4465-94DC-D576D737E985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6DF2FBD-7D4D-4465-94DC-D576D737E985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
