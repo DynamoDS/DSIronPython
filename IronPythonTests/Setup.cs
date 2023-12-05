@@ -11,7 +11,7 @@ namespace IronPythonTests
     {
         private AssemblyHelper assemblyHelper;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void RunBeforeAllTests()
         {
             var assemblyPath = Assembly.GetExecutingAssembly().Location;
@@ -27,7 +27,7 @@ namespace IronPythonTests
             AppDomain.CurrentDomain.AssemblyResolve += assemblyHelper.ResolveAssembly;
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void RunAfterAllTests()
         {
             AppDomain.CurrentDomain.AssemblyResolve -= assemblyHelper.ResolveAssembly;

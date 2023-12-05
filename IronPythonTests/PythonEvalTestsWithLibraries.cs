@@ -1,20 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using Dynamo;
+using Dynamo.Interfaces;
+using Dynamo.Models;
+using Dynamo.Scheduler;
+using DynamoShapeManager;
 using NUnit.Framework;
+using TestServices;
 
 namespace IronPythonTests
 {
-    public class PythonEvalTestsWithLibraries : DynamoModelTestBase
+    public class PythonEvalTestsWithLibraries
     {
         public delegate object PythonEvaluatorDelegate(string code, IList bindingNames, IList bindingValues);
-        protected override void GetLibrariesToPreload(List<string> libraries)
-        {
-            libraries.Add("FFITarget.dll");
-            libraries.Add("DSCoreNodes.dll");
-        }
-
+   
         public IEnumerable<PythonEvaluatorDelegate> Evaluators = new List<PythonEvaluatorDelegate> {
             DSIronPython.IronPythonEvaluator.EvaluateIronPythonScript
         };

@@ -16,9 +16,18 @@
     <PackageReference Include="IronPython" Version="2.7.12" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSIronPython\DSIronPython.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DSCoreNodes">
+      <HintPath>..\extern\DSCoreNodes.dll</HintPath>
+    </Reference>
+    <Reference Include="FFITarget">
+      <HintPath>..\extern\FFITarget.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

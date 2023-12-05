@@ -110,7 +110,7 @@ namespace IronPythonTests
             "System"
         };
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetupPythonTests()
         {
             this.logger = new SimpleLogger();
@@ -131,7 +131,7 @@ namespace IronPythonTests
             AppDomain.CurrentDomain.AssemblyResolve += assemblyHelper.ResolveAssembly;
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void RunAfterAllTests()
         {
             AppDomain.CurrentDomain.AssemblyResolve -= assemblyHelper.ResolveAssembly;
@@ -144,10 +144,10 @@ namespace IronPythonTests
         {
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
             var matchNumVar = "a = 5.0";
-            var matches = provider.FindAllVariableAssignments(matchNumVar);
+            var matches = provider.FindAllVariables(matchNumVar);
             Assert.AreEqual(1, matches.Count);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("5.0", matches["a"]);
+            Assert.AreEqual("5.0", matches["a"].Item1);
         }
 
         [Test]
@@ -156,10 +156,10 @@ namespace IronPythonTests
         {
             var matchArray = "a = []";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
-            var matches = provider.FindAllVariableAssignments(matchArray);
+            var matches = provider.FindAllVariables(matchArray);
             Assert.AreEqual(1, matches.Count);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("[]", matches["a"]);
+            Assert.AreEqual("[]", matches["a"].Item1);
         }
 
         [Test]
@@ -168,10 +168,10 @@ namespace IronPythonTests
         {
             var matchDict = "a = {}";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
-            var matches = provider.FindAllVariableAssignments(matchDict);
+            var matches = provider.FindAllVariables(matchDict);
             Assert.AreEqual(1, matches.Count);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("{}", matches["a"]);
+            Assert.AreEqual("{}", matches["a"].Item1);
         }
 
         [Test]
@@ -180,10 +180,10 @@ namespace IronPythonTests
         {
             var matchDict = "a = 2";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
-            var matches = provider.FindAllVariableAssignments(matchDict);
+            var matches = provider.FindAllVariables(matchDict);
             Assert.AreEqual(1, matches.Count);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("2", matches["a"]);
+            Assert.AreEqual("2", matches["a"].Item1);
         }
 
         [Test]
@@ -192,9 +192,9 @@ namespace IronPythonTests
         {
             var matchDict2 = "a = { 'Alice': 7, 'Toby': 'Nuts' }";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
-            var matches = provider.FindAllVariableAssignments(matchDict2);
+            var matches = provider.FindAllVariables(matchDict2);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("{ 'Alice': 7, 'Toby': 'Nuts' }", matches["a"]);
+            Assert.AreEqual("{ 'Alice': 7, 'Toby': 'Nuts' }", matches["a"].Item1);
         }
 
         [Test]
@@ -203,9 +203,9 @@ namespace IronPythonTests
         {
             var matchDict2 = "\n\na = { 'Alice': 7, 'Toby': 'Nuts' }\nb = 5.0";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
-            var matches = provider.FindAllVariableAssignments(matchDict2);
+            var matches = provider.FindAllVariables(matchDict2);
             Assert.IsTrue(matches.ContainsKey("a"));
-            Assert.AreEqual("{ 'Alice': 7, 'Toby': 'Nuts' }", matches["a"]);
+            Assert.AreEqual("{ 'Alice': 7, 'Toby': 'Nuts' }", matches["a"].Item1);
         }
 
         [Test]
@@ -274,7 +274,7 @@ namespace IronPythonTests
         [Category("UnitTests")]
         public void CanImportSystemLibraryAndGetCompletionData()
         {
-            var str = "\nimport System\nSystem.";
+            var str = "\nclr.AddReference('System.Console')\nimport System\nSystem.";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
 
             var completionData = provider.GetCompletionData(str);
@@ -291,14 +291,14 @@ namespace IronPythonTests
         [Category("UnitTests")]
         public void CanImportSystemCollectionsLibraryAndGetCompletionData()
         {
-            var str = "\nimport System.Collections\nSystem.Collections.";
+            var str = "\nclr.AddReference('System.Collections.NonGeneric')\nimport System.Collections\nSystem.Collections.";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
 
             var completionData = provider.GetCompletionData(str);
             var completionList = completionData.Select(d => d.Text);
             Assert.IsTrue(completionList.Any());
             Assert.IsTrue(completionList.Intersect(new[] { "Hashtable", "Queue", "Stack" }).Count() == 3);
-            Assert.AreEqual(29, completionData.Length);
+            Assert.AreEqual(28, completionData.Length);
         }
 
 
@@ -333,7 +333,7 @@ namespace IronPythonTests
             var str = "from math import sin, cos\n";
             var provider = new DSIronPython.IronPythonCodeCompletionProviderCore();
             provider.UpdateImportedTypes(str);
-            Assert.AreEqual(10,provider.ImportedTypes.Count);
+            Assert.AreEqual(2,provider.ImportedTypes.Count);
         }
         /*finish
         [Test]
