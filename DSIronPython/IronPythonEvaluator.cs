@@ -18,18 +18,7 @@ using Microsoft.Scripting.Utils;
 
 namespace DSIronPython
 {
-    [SupressImportIntoVM]
-    [Obsolete("Deprecated. Please use Dynamo.PythonServices.EvaluationState instead.")]
-    public enum EvaluationState { Begin, Success, Failed }
-
-    [SupressImportIntoVM]
-    [Obsolete("Deprecated. Please use evaluation handlers from Dynamo.PythonServices instead.")]
-    public delegate void EvaluationEventHandler(EvaluationState state,
-                                                ScriptEngine engine,
-                                                ScriptScope scope,
-                                                string code,
-                                                IList bindingValues);
-
+   
     /// <summary>
     ///     Evaluates a Python script in the Dynamo context.
     /// </summary>
@@ -311,26 +300,14 @@ sys.stdout = DynamoStdOut({0})
 
         #region Evaluation events
 
-        /// <summary>
-        ///     Emitted immediately before execution begins
-        /// </summary>
-        [SupressImportIntoVM]
-        [Obsolete("Deprecated. Please use EvaluationStarted instead.")]
-        public static event EvaluationEventHandler EvaluationBegin;
-
+      
         /// <summary>
         ///     Emitted immediately before execution begins
         /// </summary>
         [SupressImportIntoVM]
         public override event EvaluationStartedEventHandler EvaluationStarted;
 
-        /// <summary>
-        ///     Emitted immediately after execution ends or fails
-        /// </summary>
-        [SupressImportIntoVM]
-        [Obsolete("Deprecated. Please use EvaluationFinished instead.")]
-        public static event EvaluationEventHandler EvaluationEnd;
-
+       
         /// <summary>
         ///     Emitted immediately after execution ends or fails
         /// </summary>
@@ -349,9 +326,7 @@ sys.stdout = DynamoStdOut({0})
                                                 string code, 
                                                 IList bindingValues )
         {
-            // Call deprecated events until they are completely removed.
-            EvaluationBegin?.Invoke(EvaluationState.Begin, engine, scope, code, bindingValues);
-            
+          
             if (EvaluationStarted != null)
             {
                 EvaluationStarted(code, bindingValues, (n, v) => { scope.SetVariable(n, InputMarshaler.Marshal(v)); });
@@ -376,10 +351,7 @@ sys.stdout = DynamoStdOut({0})
                                              string code,
                                              IList bindingValues)
         {
-            // Call deprecated events until they are completely removed.
-            EvaluationEnd?.Invoke(isSuccessful ? EvaluationState.Success : EvaluationState.Failed,
-                engine, scope, code, bindingValues);
-
+           
             if (EvaluationFinished != null)
             {
                 EvaluationFinished( isSuccessful ? Dynamo.PythonServices.EvaluationState.Success : Dynamo.PythonServices.EvaluationState.Failed, 
