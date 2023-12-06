@@ -1,28 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <ProjectGuid>{9EEF4F42-6B3B-4358-9A8A-C2701539A822}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DSIronPython</RootNamespace>
-    <AssemblyName>DSIronPython</AssemblyName>
-	  <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-	<PackageReference Include="DynamoVisualProgramming.Core" Version="3.0.0-beta7023" />
-	<PackageReference Include="IronPython" Version="2.7.12" />
-	<PackageReference Include="IronPython.StdLib" Version="2.7.12" />
+	<ImportGroup Label="PropertySheets">
+		<Import Project="$(SolutionDir)Config\shared.props" />
+	</ImportGroup>
+	<PropertyGroup>
+		<OutputPath>$(SolutionDir)\package_output\DSIronPython\bin\</OutputPath>
+		<ProjectGuid>{9EEF4F42-6B3B-4358-9A8A-C2701539A822}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>DSIronPython</RootNamespace>
+		<AssemblyName>DSIronPython</AssemblyName>
+		<TargetFramework>net6.0</TargetFramework>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="DynamoVisualProgramming.Core" Version="3.0.0-beta7023">
+			<IncludeAssets></IncludeAssets>
+			<ExcludeAssets>runtime</ExcludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="IronPython" Version="2.7.12" />
+		<PackageReference Include="IronPython.StdLib" Version="2.7.12" />
 
 
-  </ItemGroup>
+	</ItemGroup>
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>IronPythonTests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-  <Target Name="AfterBuildOps" AfterTargets="Build">
-    <ItemGroup>
-      <PythonStdLib Include="$(ProjectDir)..\..\packages\IronPython.StdLib.2.7.9\contentFiles\any\any\Lib\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(PythonStdLib)" DestinationFiles="@(PythonStdLib->'$(TargetDir)IronPython.StdLib.2.7.9\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-  </Target>
+
+	<Target Name="Move python libs to extra" AfterTargets="Build">
+		<ItemGroup>
+			<MySourceFiles Include="$(OutputPath)\*lib\**;" />
+		</ItemGroup>
+
+		<Move SourceFiles="@(MySourceFiles)" DestinationFiles="$(OutputPath)..\extra\%(RecursiveDir)%(Filename)%(Extension)" />
+	</Target>
+
+	<Target Name="Remove Lib" AfterTargets="Move python libs to extra">
+		<RemoveDir Directories="$(OutputPath)\lib" />
+	</Target>
+
+	<Target Name="copypkgjson" AfterTargets="Build">
+		<Copy SourceFiles="pkg.json" DestinationFolder="$(OutputPath)..\"/>
+	</Target>
 </Project>

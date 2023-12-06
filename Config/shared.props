@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+  <!--<OutputPath Condition=" '$(OutputPath)' == '' ">$(SolutionDir)bin\$(Platform)\$(Configuration)</OutputPath>-->
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	 <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+    </Project>
