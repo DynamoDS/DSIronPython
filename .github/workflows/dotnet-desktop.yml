@@ -29,5 +29,5 @@ jobs:
             Write-Error "python node dll was not found!"
           }
       - name: Test with the dotnet CLI
-        run: dotnet test
+        run: dotnet test ${{ github.workspace }}\DSIronPython  
 
