@@ -1,0 +1,33 @@
+# Build DSIronPython package using msbuild
+name: DSIronPython-VS2022Build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          path: DSIronPython
+          repository: DynamoDS/DSIronPython
+      - name: Setup nuget
+        uses: nuget/setup-nuget@v1.2
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v1.3
+      - name: Nuget Restore DSIronPython solution
+        run: nuget restore ${{ github.workspace }}\DSIronPython\DSIronPython.sln
+      - name: Build DSIronPython with MSBuild
+        run: |
+          Write-Output "***Continue with the build, Good luck developer!***"
+          msbuild ${{ github.workspace }}\DSIronPython\DSIronPython.sln
+      - name: Look for package
+        run: |
+          Write-Output "***Locating iron python package!***"
+          if (Test-Path -Path "${{ github.workspace }}\DSIronPython\package_output\DSIronPython\bin\DSIronPython.dll") {
+            Write-Output "python node dll exists!"
+          } else {
+            Write-Error "python node dll was not found!"
+          }
+      - name: Test with the dotnet CLI
+        run: dotnet test
+
