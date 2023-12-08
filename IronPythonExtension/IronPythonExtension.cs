@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Loader;
 using Dynamo.Extensions;
 using Dynamo.Logging;
 using Dynamo.PythonServices;
@@ -61,26 +62,9 @@ namespace IronPythonExtension
         /// <param name="sp"></param>
         public void Ready(ReadyParams sp)
         {
-            // Searches for DSIronPython engine binary in same folder with extension itself
-            var targetDir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(IronPythonExtension)).Location);
-            var libraryLoader = sp.StartupParams.LibraryLoader;
-            Assembly pythonEvaluatorLib = null;
-            try
-            {
-                pythonEvaluatorLib = Assembly.LoadFrom(Path.Combine(targetDir, PythonEvaluatorAssembly + ".dll"));
-            }
-            catch (Exception ex)
-            {
-                // Most likely the IronPython engine is excluded in this case
-                // but logging the exception message in case for diagnose
-                OnMessageLogged(LogMessage.Info(ex.Message));
-                return;
-            }
-            // Import IronPython Engine into VM, so Python node using IronPython engine could evaluate correctly
-            if (pythonEvaluatorLib != null)
-            {
-                libraryLoader.LoadNodeLibrary(pythonEvaluatorLib);
-            }
+            var extraPath = Path.Combine(new FileInfo(Assembly.GetAssembly(typeof(IronPythonExtension)).Location).Directory.Parent.FullName, "extra");
+            var alc = new IsolatedPythoContext(Path.Combine(extraPath,"DSIronPython.dll"));
+            alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
         }
 
         /// <summary>
@@ -89,6 +73,37 @@ namespace IronPythonExtension
         public void Shutdown()
         {
             // Do nothing for now
+        }
+    }
+    internal class IsolatedPythoContext : AssemblyLoadContext
+    {
+        private AssemblyDependencyResolver resolver;
+
+        public IsolatedPythoContext(string libPath)
+        {
+            resolver = new AssemblyDependencyResolver(libPath);
+        }
+
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            string assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
+            if (assemblyPath != null)
+            {
+                return LoadFromAssemblyPath(assemblyPath);
+            }
+
+            return null;
+        }
+
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        {
+            string libraryPath = resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+            if (libraryPath != null)
+            {
+                return LoadUnmanagedDllFromPath(libraryPath);
+            }
+
+            return IntPtr.Zero;
         }
     }
 }

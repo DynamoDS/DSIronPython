@@ -3,7 +3,7 @@
 		<Import Project="$(SolutionDir)Config\shared.props" />
 	</ImportGroup>
   <PropertyGroup>
-	<OutputPath>$(SolutionDir)\package_output\DSIronPython\bin\</OutputPath>
+	<OutputPath>$(SolutionDir)\package_output\DSIronPython\extra\</OutputPath>
     <ProjectGuid>{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -21,6 +21,6 @@
     <ItemGroup>
       <ExtensionDefinition Include="IronPythonExtension_ExtensionDefinition.xml" />
     </ItemGroup>
-    <Copy SourceFiles="@(ExtensionDefinition)" DestinationFolder="$(OutputPath)..\extra" />
+    <Copy SourceFiles="@(ExtensionDefinition)" DestinationFolder="$(OutputPath)" />
   </Target>
 </Project>

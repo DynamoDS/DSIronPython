@@ -3,7 +3,7 @@
 		<Import Project="$(SolutionDir)Config\shared.props" />
 	</ImportGroup>
 	<PropertyGroup>
-		<OutputPath>$(SolutionDir)\package_output\DSIronPython\bin\</OutputPath>
+		<OutputPath>$(SolutionDir)\package_output\DSIronPython\extra\</OutputPath>
 		<ProjectGuid>{9EEF4F42-6B3B-4358-9A8A-C2701539A822}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
@@ -29,7 +29,7 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 
-	<Target Name="Move python libs to extra" AfterTargets="Build">
+	<!--<Target Name="Move python libs to extra" AfterTargets="Build">
 		<ItemGroup>
 			<MySourceFiles Include="$(OutputPath)\*lib\**;" />
 		</ItemGroup>
@@ -39,7 +39,7 @@
 
 	<Target Name="Remove Lib" AfterTargets="Move python libs to extra">
 		<RemoveDir Directories="$(OutputPath)\lib" />
-	</Target>
+	</Target>-->
 
 	<Target Name="copypkgjson" AfterTargets="Build">
 		<Copy SourceFiles="pkg.json" DestinationFolder="$(OutputPath)..\"/>

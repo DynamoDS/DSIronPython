@@ -1,4 +1,4 @@
 <ExtensionDefinition>
-  <AssemblyPath>..\bin\IronPythonExtension.dll</AssemblyPath>
+  <AssemblyPath>IronPythonExtension.dll</AssemblyPath>
   <TypeName>IronPythonExtension.IronPythonExtension</TypeName>
 </ExtensionDefinition>
