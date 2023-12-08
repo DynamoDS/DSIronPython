@@ -30,15 +30,16 @@ jobs:
           }
       - name: Run test with the dotnet CLI
         run: |
-          dotnet test ${{ github.workspace }}\DSIronPython --logger trx --results-directory ${{ github.workspace }}\DSIronPython\TestResults
-      - name: Publish test results
-        uses: bibipkins/dotnet-test-reporter@v1.3.3
-        with:
-          github-token: ${{ github.token }}
-          results-path: ${{ github.workspace }}/DSIronPython/TestResults/*.trx
+          dotnet test ${{ github.workspace }}\DSIronPython --logger "trx;LogFileName=results.trx" --results-directory ${{ github.workspace }}\DSIronPython\TestResults
       - name: Upload build artifact
         uses: actions/upload-artifact@v3.1.3
         with:
           name: DSIronPython
           path: ${{ github.workspace }}\DSIronPython\package_output
           retention-days: 7
+      - name: Upload test artifact
+        uses: actions/upload-artifact@v3.1.3
+        with:
+          name: TestResults
+          path: ${{ github.workspace }}\DSIronPython\TestResults
+          retention-days: 1
