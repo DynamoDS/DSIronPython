@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Dynamo.Extensions;
@@ -64,7 +65,10 @@ namespace IronPythonExtension
         {
             var extraPath = Path.Combine(new FileInfo(Assembly.GetAssembly(typeof(IronPythonExtension)).Location).Directory.Parent.FullName, "extra");
             var alc = new IsolatedPythoContext(Path.Combine(extraPath,"DSIronPython.dll"));
-            alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
+            var dsiron = alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
+
+            //load the engine into Dynamo ourselves.
+            LoadPythonEngine(dsiron);
         }
 
         /// <summary>
@@ -73,6 +77,50 @@ namespace IronPythonExtension
         public void Shutdown()
         {
             // Do nothing for now
+        }
+
+        private void LoadPythonEngine(Assembly assembly)
+        {
+            if (assembly == null)
+            {
+                return;
+            }
+
+            // Currently we are using try-catch to validate loaded assembly and Singleton Instance method exist
+            // but we can optimize by checking all loaded types against evaluators interface later
+            try
+            {
+                Type eType = null;
+                PropertyInfo instanceProp = null;
+                try
+                {
+                    eType = assembly.GetTypes().FirstOrDefault(x => typeof(PythonEngine).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+                    if (eType == null) return;
+
+                    instanceProp = eType?.GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static);
+                    if (instanceProp == null) return;
+                }
+                catch
+                {
+                    // Ignore exceptions from iterating assembly types.
+                    return;
+                }
+
+                PythonEngine engine = (PythonEngine)instanceProp.GetValue(null);
+                if (engine == null)
+                {
+                    throw new Exception($"Could not get a valid PythonEngine instance by calling the {eType.Name}.Instance method");
+                }
+
+                if (!PythonEngineManager.Instance.AvailableEngines.Any(x=>x.Name == engine.Name))
+                {
+                    PythonEngineManager.Instance.AvailableEngines.Add(engine);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to add a Python engine from assembly {assembly.GetName().Name}.dll with error: {ex.Message}");
+            }
         }
     }
     internal class IsolatedPythoContext : AssemblyLoadContext
