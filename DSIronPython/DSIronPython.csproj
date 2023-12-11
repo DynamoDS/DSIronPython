@@ -9,7 +9,7 @@
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<RootNamespace>DSIronPython</RootNamespace>
 		<AssemblyName>DSIronPython</AssemblyName>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>

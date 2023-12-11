@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronPythonTests</RootNamespace>
     <AssemblyName>IronPythonTests</AssemblyName>
-	  <TargetFramework>net6.0-windows</TargetFramework>
+	  <TargetFramework>net8.0-windows</TargetFramework>
 	  <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>

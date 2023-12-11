@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronPythonExtension</RootNamespace>
     <AssemblyName>IronPythonExtension</AssemblyName>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="IronPythonExtension_ExtensionDefinition.xml" />
