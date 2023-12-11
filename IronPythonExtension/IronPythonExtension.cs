@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Dynamo.Extensions;
+using Dynamo.Logging;
+using Dynamo.PythonServices;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using Dynamo.Extensions;
-using Dynamo.Logging;
-using Dynamo.PythonServices;
 
 namespace IronPythonExtension
 {
@@ -63,12 +63,12 @@ namespace IronPythonExtension
         /// <param name="sp"></param>
         public void Ready(ReadyParams sp)
         {
-            var extraPath = Path.Combine(new FileInfo(Assembly.GetAssembly(typeof(IronPythonExtension)).Location).Directory.Parent.FullName, "extra");
-            var alc = new IsolatedPythoContext(Path.Combine(extraPath,"DSIronPython.dll"));
-            var dsiron = alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
+            var extraPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.Parent.FullName, "extra");
+            var alc = new IsolatedPythonContext(Path.Combine(extraPath,"DSIronPython.dll"));
+            var dsIronAssem = alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
 
             //load the engine into Dynamo ourselves.
-            LoadPythonEngine(dsiron);
+            LoadPythonEngine(dsIronAssem);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace IronPythonExtension
             // Do nothing for now
         }
 
-        private void LoadPythonEngine(Assembly assembly)
+        private static void LoadPythonEngine(Assembly assembly)
         {
             if (assembly == null)
             {
@@ -112,7 +112,7 @@ namespace IronPythonExtension
                     throw new Exception($"Could not get a valid PythonEngine instance by calling the {eType.Name}.Instance method");
                 }
 
-                if (!PythonEngineManager.Instance.AvailableEngines.Any(x=>x.Name == engine.Name))
+                if (PythonEngineManager.Instance.AvailableEngines.All(x => x.Name != engine.Name))
                 {
                     PythonEngineManager.Instance.AvailableEngines.Add(engine);
                 }
@@ -123,11 +123,11 @@ namespace IronPythonExtension
             }
         }
     }
-    internal class IsolatedPythoContext : AssemblyLoadContext
+    internal class IsolatedPythonContext : AssemblyLoadContext
     {
         private AssemblyDependencyResolver resolver;
 
-        public IsolatedPythoContext(string libPath)
+        public IsolatedPythonContext(string libPath)
         {
             resolver = new AssemblyDependencyResolver(libPath);
         }
