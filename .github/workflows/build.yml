@@ -23,7 +23,7 @@ jobs:
       - name: Look for package
         run: |
           Write-Output "***Locating iron python package!***"
-          if (Test-Path -Path "${{ github.workspace }}\DSIronPython\package_output\DSIronPython\bin\DSIronPython.dll") {
+          if (Test-Path -Path "${{ github.workspace }}\DSIronPython\package_output\DSIronPython\extra\DSIronPython.dll") {
             Write-Output "python node dll exists!"
           } else {
             Write-Error "python node dll was not found!"
