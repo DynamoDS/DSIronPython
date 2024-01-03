@@ -1,4 +1,5 @@
 ﻿using Dynamo.Extensions;
+using Dynamo.Graph.Workspaces;
 using Dynamo.Logging;
 using Dynamo.PythonServices;
 using System;
@@ -60,15 +61,30 @@ namespace IronPythonExtension
         /// Action to be invoked when the Dynamo has started up and is ready
         /// for user interaction. 
         /// </summary>
-        /// <param name="sp"></param>
-        public void Ready(ReadyParams sp)
+        /// <param name="rp"></param>
+        public void Ready(ReadyParams rp)
         {
             var extraPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.Parent.FullName, "extra");
-            var alc = new IsolatedPythonContext(Path.Combine(extraPath,"DSIronPython.dll"));
-            var dsIronAssem = alc.LoadFromAssemblyName(new AssemblyName("DSIronPython"));
+            var alc = new IsolatedPythonContext(Path.Combine(extraPath,$"{PythonEvaluatorAssembly}.dll"));
+            var dsIronAssem = alc.LoadFromAssemblyName(new AssemblyName(PythonEvaluatorAssembly));
 
             //load the engine into Dynamo ourselves.
             LoadPythonEngine(dsIronAssem);
+            
+            //we used to do this:
+            //but it's not neccesary to load anything into the VM.
+            //instead we skip all the extra work and trigger the side effect we want
+            //which is re executing the graph after the dsIronPython evaluator is loaded into the PythonEngineManager.
+            //rp.StartupParams.LibraryLoader.LoadNodeLibrary(dsIronAssem);
+
+            if(rp.CurrentWorkspaceModel is HomeWorkspaceModel hwm)
+            {
+                foreach (var n in hwm.Nodes)
+                {
+                    n.MarkNodeAsModified(true);
+                }
+                hwm.Run();
+            }
         }
 
         /// <summary>
