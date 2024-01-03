@@ -86,10 +86,6 @@ namespace IronPythonExtension
                 hwm.Run();
             }
         }
-
-        /// <summary>
-        /// Action to be invoked when shutdown has begun.
-        /// </summary>
         public void Shutdown()
         {
             // Do nothing for now
@@ -138,6 +134,8 @@ namespace IronPythonExtension
                 throw new Exception($"Failed to add a Python engine from assembly {assembly.GetName().Name}.dll with error: {ex.Message}");
             }
         }
+
+
     }
     internal class IsolatedPythonContext : AssemblyLoadContext
     {
