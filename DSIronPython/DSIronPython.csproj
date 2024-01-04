@@ -29,18 +29,6 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 
-	<!--<Target Name="Move python libs to extra" AfterTargets="Build">
-		<ItemGroup>
-			<MySourceFiles Include="$(OutputPath)\*lib\**;" />
-		</ItemGroup>
-
-		<Move SourceFiles="@(MySourceFiles)" DestinationFiles="$(OutputPath)..\extra\%(RecursiveDir)%(Filename)%(Extension)" />
-	</Target>
-
-	<Target Name="Remove Lib" AfterTargets="Move python libs to extra">
-		<RemoveDir Directories="$(OutputPath)\lib" />
-	</Target>-->
-
 	<Target Name="copypkgjson" AfterTargets="Build">
 		<Copy SourceFiles="pkg.json" DestinationFolder="$(OutputPath)..\"/>
 	</Target>
