@@ -1,38 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<ImportGroup Label="PropertySheets">
-		<Import Project="$(SolutionDir)Config\shared.props" />
-	</ImportGroup>
   <PropertyGroup>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E6DF2FBD-7D4D-4465-94DC-D576D737E985}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronPythonTests</RootNamespace>
-    <AssemblyName>IronPythonTests</AssemblyName>
-	  <TargetFramework>net6.0-windows</TargetFramework>
-	  <UseWPF>true</UseWPF>
+	  <TargetFramework>net8.0</TargetFramework>
+	  <IsTestProject>true</IsTestProject>
+	  <IsPackable>false</IsPackable>
+
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DynamoVisualProgramming.LibG_230_0_0" Version="3.0.0.3171" />
-    <PackageReference Include="DynamoVisualProgramming.Tests" Version="3.0.0-beta7023" />
-    <PackageReference Include="IronPython" Version="2.7.12" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+	<PackageReference Include="DynamoVisualProgramming.Tests" Version="3.1.0-beta3940"></PackageReference>
+	  <PackageReference Include="IronPython" Version="2.7.12" />
+	  <PackageReference Include="DynamoVisualProgramming.Core" Version="3.1.0-beta3940">
+	  </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSIronPython\DSIronPython.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="DSCoreNodes">
-      <HintPath>..\extern\DSCoreNodes.dll</HintPath>
-    </Reference>
-    <Reference Include="FFITarget">
-      <HintPath>..\extern\FFITarget.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
 </Project>

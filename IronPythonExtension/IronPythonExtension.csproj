@@ -4,18 +4,17 @@
 	</ImportGroup>
   <PropertyGroup>
 	<OutputPath>$(SolutionDir)\package_output\DSIronPython\extra\</OutputPath>
-    <ProjectGuid>{182FCA4E-B6EF-451F-9EC4-7BF2C622F4F7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IronPythonExtension</RootNamespace>
     <AssemblyName>IronPythonExtension</AssemblyName>
-	  <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="IronPythonExtension_ExtensionDefinition.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DynamoVisualProgramming.Core" Version="3.0.0-beta7023" />
+    <PackageReference Include="DynamoVisualProgramming.Core" Version="3.0.2.7476" />
   </ItemGroup>
   <Target Name="AfterBuildOps" AfterTargets="Build">
     <ItemGroup>

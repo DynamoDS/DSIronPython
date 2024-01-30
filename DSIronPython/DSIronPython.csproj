@@ -4,20 +4,19 @@
 	</ImportGroup>
 	<PropertyGroup>
 		<OutputPath>$(SolutionDir)\package_output\DSIronPython\extra\</OutputPath>
-		<ProjectGuid>{9EEF4F42-6B3B-4358-9A8A-C2701539A822}</ProjectGuid>
 		<OutputType>Library</OutputType>
 		<AppDesignerFolder>Properties</AppDesignerFolder>
 		<RootNamespace>DSIronPython</RootNamespace>
 		<AssemblyName>DSIronPython</AssemblyName>
-		<TargetFramework>net6.0</TargetFramework>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<TargetFramework>net8.0</TargetFramework>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="DynamoVisualProgramming.Core" Version="3.0.0-beta7023">
-			<IncludeAssets></IncludeAssets>
+
+		<PackageReference Include="DynamoVisualProgramming.Core" Version="3.1.0-beta3940">
 			<ExcludeAssets>runtime</ExcludeAssets>
-			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+	
 		<PackageReference Include="IronPython" Version="2.7.12" />
 		<PackageReference Include="IronPython.StdLib" Version="2.7.12" />
 
@@ -30,6 +29,6 @@
 	</ItemGroup>
 
 	<Target Name="copypkgjson" AfterTargets="Build">
-		<Copy SourceFiles="pkg.json" DestinationFolder="$(OutputPath)..\"/>
+		<Copy SourceFiles="pkg.json" DestinationFolder="$(OutputPath)..\" />
 	</Target>
 </Project>
