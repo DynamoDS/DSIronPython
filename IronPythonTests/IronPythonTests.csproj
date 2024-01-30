@@ -14,4 +14,9 @@
   <ItemGroup>
     <ProjectReference Include="..\DSIronPython\DSIronPython.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="TestServices.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
