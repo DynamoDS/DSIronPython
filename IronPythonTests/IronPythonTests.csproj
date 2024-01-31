@@ -8,8 +8,6 @@
   <ItemGroup>
 	<PackageReference Include="DynamoVisualProgramming.Tests" Version="3.1.0-beta3940"></PackageReference>
 	  <PackageReference Include="IronPython" Version="2.7.12" />
-	  <PackageReference Include="DynamoVisualProgramming.Core" Version="3.1.0-beta3940">
-	  </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSIronPython\DSIronPython.csproj" />
@@ -19,4 +17,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+	<Target Name="DownloadDynamoAndUnzip" BeforeTargets="Build">
+		<DownloadFile SourceUrl="https://dyn-builds-data.s3-us-west-2.amazonaws.com/DynamoCoreRuntime_3.1.0.3952_20240131T0007.zip" DestinationFolder="$(MSBuildProjectDirectory)" />
+		<Unzip SourceFiles="DynamoCoreRuntime_3.1.0.3952_20240131T0007.zip" DestinationFolder="$(OutputPath)\" OverwriteReadOnlyFiles="true" />
+	</Target>
 </Project>
