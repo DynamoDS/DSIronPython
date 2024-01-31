@@ -1,37 +1,85 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Dynamo.Utilities;
 using NUnit.Framework;
 
-namespace IronPythonTests
+
+[SetUpFixture]
+public class Setup
 {
-    [SetUpFixture]
-    public class Setup
+    private string moduleRootFolder;
+    List<string> resolutionPaths;
+
+    [OneTimeSetUp]
+    public void RunBeforeAllTests()
     {
-        private AssemblyHelper assemblyHelper;
+        var thisDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var configPath = Path.Combine(thisDir, "TestServices.dll.config");
 
-        [OneTimeSetUp]
-        public void RunBeforeAllTests()
+        // Adjust the config file map because the config file
+        // might not always be in the same directory as the dll.
+        var map = new ExeConfigurationFileMap { ExeConfigFilename = configPath };
+        var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+
+        var element = config.AppSettings.Settings["DynamoBasePath"];
+        moduleRootFolder = element?.Value ?? string.Empty;
+
+        if (string.IsNullOrEmpty(moduleRootFolder))
         {
-            var assemblyPath = Assembly.GetExecutingAssembly().Location;
-            var moduleRootFolder = Path.GetDirectoryName(assemblyPath);
+            throw new Exception($"Missing DynamoBasePath in TestServices.dll.config. Please set the DynamoBasePath to a valid Dynamo bin folder. DynamoBasePath is set to {moduleRootFolder}");
+        }
+        else if (!File.Exists(Path.Combine(moduleRootFolder, "DynamoCore.dll")))
+        {
+            throw new Exception($"Invalid DynamoBasePath in TestServices.dll.config. Please set the DynamoBasePath to a valid Dynamo bin folder. DynamoBasePath is set to {moduleRootFolder}");
+        }
 
-            var resolutionPaths = new[]
+        resolutionPaths = new List<string>
+        {
+            // Search for nodes
+            Path.Combine(moduleRootFolder, "nodes"),
+            Path.Combine(moduleRootFolder, "en-us")
+        };
+        AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve; ;
+    }
+
+    private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+    {
+        try
+        {
+            var targetAssemblyName = new AssemblyName(args.Name).Name + ".dll";
+
+            // First check the core path
+            string assemblyPath = Path.Combine(moduleRootFolder, targetAssemblyName);
+            if (File.Exists(assemblyPath))
             {
-                // These tests need "CoreNodeModelsWpf.dll" under "nodes" folder.
-                Path.Combine(moduleRootFolder, "nodes")
-            };
+                return Assembly.LoadFrom(assemblyPath);
+            }
 
-            assemblyHelper = new AssemblyHelper(moduleRootFolder, resolutionPaths);
-            AppDomain.CurrentDomain.AssemblyResolve += assemblyHelper.ResolveAssembly;
+            // Then check all additional resolution paths
+            foreach (var resolutionPath in resolutionPaths)
+            {
+                assemblyPath = Path.Combine(resolutionPath, targetAssemblyName);
+                if (File.Exists(assemblyPath))
+                {
+                    return Assembly.LoadFrom(assemblyPath);
+                }
+            }
+
+            return null;
         }
-
-        [OneTimeTearDown]
-        public void RunAfterAllTests()
+        catch (Exception ex)
         {
-            AppDomain.CurrentDomain.AssemblyResolve -= assemblyHelper.ResolveAssembly;
-            assemblyHelper = null;
+            throw new Exception(string.Format("There location of the assembly, " +
+                "{0} could not be resolved for loading.", args.Name), ex);
         }
+    }
+
+    [OneTimeTearDown]
+    public void RunAfterAllTests()
+    {
+        AppDomain.CurrentDomain.AssemblyResolve -= CurrentDomain_AssemblyResolve;
     }
 }
