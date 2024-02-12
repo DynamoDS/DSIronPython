@@ -20,6 +20,6 @@
 
 	<Target Name="DownloadDynamoAndUnzip" BeforeTargets="Build">
 		<DownloadFile SourceUrl="https://dyn-builds-data.s3-us-west-2.amazonaws.com/DynamoCoreRuntime_3.1.0.3952_20240131T0007.zip" DestinationFolder="$(MSBuildProjectDirectory)" />
-		<Unzip SourceFiles="DynamoCoreRuntime_3.1.0.3952_20240131T0007.zip" DestinationFolder="$(OutputPath)\" OverwriteReadOnlyFiles="true" />
+		<Unzip SourceFiles="DynamoCoreRuntime_3.1.0.3952_20240131T0007.zip" DestinationFolder="$(OutputPath)\DynamoRuntime" OverwriteReadOnlyFiles="true" />
 	</Target>
 </Project>
