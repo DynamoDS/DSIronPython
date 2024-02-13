@@ -12,7 +12,7 @@ using Dynamo.PythonServices.EventHandlers;
 using Dynamo.Session;
 using Dynamo.Utilities;
 using IronPython.Hosting;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Utils;
 
@@ -25,6 +25,8 @@ namespace DSIronPython
     [IsVisibleInDynamoLibrary(false)]
     public class IronPythonEvaluator : Dynamo.PythonServices.PythonEngine
     {
+        private bool CONFIG_ENABLE_NET48SHIMCOMPAT = false;
+
         private const string DynamoPrintFuncName = "__dynamoprint__";
         /// <summary> stores a copy of the previously executed code</summary>
         private static string prev_code { get; set; }
@@ -120,7 +122,18 @@ namespace DSIronPython
             if (code != prev_code)
             {
                 ScriptEngine PythonEngine = Python.CreateEngine();
-                if (!string.IsNullOrEmpty(stdLib))
+                //to maintain compatability with ironPython code written in .netframework - we load the system.dll shim
+                //which loads many types which used to be in system.dll(mscorlib) like system.diagnostics.process
+                //which were moved in .Net. These types are now importable by python code without users needing to add
+                //clr.addreference.
+                //TODO consider a preference for this.
+                //TODO test smaller shims...netstd.dll
+
+                if (CONFIG_ENABLE_NET48SHIMCOMPAT)
+                {
+                    PythonEngine.Runtime.LoadAssembly(Assembly.Load("System"));
+                }
+                    if (!string.IsNullOrEmpty(stdLib))
                 {
                     paths = PythonEngine.GetSearchPaths().ToList();
                     paths.Add(stdLib);
@@ -366,5 +379,23 @@ sys.stdout = DynamoStdOut({0})
 
         #endregion
 
+        internal IronPythonEvaluator(IConfiguration config = null)
+        {
+            //either inject a config or load from appsettings.json
+            if (config is not null)
+            {
+
+            }
+            else
+            {
+                var configPath = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "appsettings.json");
+                config = new ConfigurationBuilder().AddJsonFile(configPath, optional: true).Build();
+            }
+            var enableShimLoad = config.GetSection("config").GetChildren().FirstOrDefault(x => x.Key == nameof(CONFIG_ENABLE_NET48SHIMCOMPAT))?.Value;
+            if (bool.TryParse(enableShimLoad, out var parsed))
+            {
+                CONFIG_ENABLE_NET48SHIMCOMPAT = parsed;
+            }
+        }
     }
 }
