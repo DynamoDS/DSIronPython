@@ -23,7 +23,10 @@ ci_test:
     -
       scripts:
         - "dotnet test --no-build --configuration Release DSIronPython.sln --logger:junit"   
-  test_report_dir: "./IronPythonTests/TestResults"
+  test_report_dir: "IronPythonTests/TestResults"
+  test_report_pattern:
+    format: "junit"
+    pattern: "*.xml"
 
 soc2:
   harmony:
@@ -48,6 +51,6 @@ deployment:
     publish_to_artifactory: false
     publish_to_jenkins: true
     scripts:
-      - "cd package_output && zip -r ../DSIronPythonPackage.zip *"
+      - "pwsh.exe -ExecutionPolicy ByPass -Command Compress-Archive -Path .\\package_output\\DSIronPython -DestinationPath .\\DSIronPythonPackage.zip"
     outputs:
       - "DSIronPythonPackage.zip"
