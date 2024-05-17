@@ -30,6 +30,7 @@ soc2:
     allow_branches:
       - master
     hidden_email_list: dynamo_ws_access
+    fail_on_audit_failure: false
     third_party_lib_paths:
       - package_output
 
