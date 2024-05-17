@@ -30,5 +30,24 @@ soc2:
     allow_branches:
       - master
     hidden_email_list: dynamo_ws_access
+    fail_on_audit_failure: false
     third_party_lib_paths:
       - package_output
+
+deployment:
+  -  
+    type: sign
+    files_to_sign:
+        - package_output\DSIronPython\bin\DSIronPythonEmpty.dll
+        - package_output\DSIronPython\extra\DSIronPython.dll
+        - package_output\DSIronPython\extra\IronPythonExtension.dll
+ 
+  -
+    type: artifacts
+    allow_branches: master
+    publish_to_artifactory: false
+    publish_to_jenkins: true
+    scripts:
+      - "cd package_output && zip -r ../DSIronPythonPackage.zip *"
+    outputs:
+      - "DSIronPythonPackage.zip"
