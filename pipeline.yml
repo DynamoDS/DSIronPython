@@ -23,7 +23,10 @@ ci_test:
     -
       scripts:
         - "dotnet test --no-build --configuration Release DSIronPython.sln --logger:junit"   
-  test_report_dir: "./IronPythonTests/TestResults"
+  test_report_dir: "IronPythonTests/TestResults"
+  test_report_pattern:
+    format: "junit"
+    pattern: "*.xml"
 
 soc2:
   harmony:
