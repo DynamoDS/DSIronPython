@@ -48,6 +48,6 @@ deployment:
     publish_to_artifactory: false
     publish_to_jenkins: true
     scripts:
-      - "cd package_output && zip -r ../DSIronPythonPackage.zip *"
+      - "pwsh.exe -ExecutionPolicy ByPass -Command Compress-Archive -Path .\\package_output\\DSIronPython -DestinationPath .\\DSIronPythonPackage.zip"
     outputs:
       - "DSIronPythonPackage.zip"
