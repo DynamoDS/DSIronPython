@@ -22,11 +22,18 @@ ci_test:
   tests:    
     -
       scripts:
-        - "dotnet test --no-build --configuration Release DSIronPython.sln --filter \"TestCategory!=Failure\" --logger:junit"   
+        - dotnet coverage collect "dotnet test --no-build --configuration Release DSIronPython.sln --filter \"TestCategory!=Failure\" --logger:junit  --logger:trx" -f xml -o "coverage.xml"
   test_report_dir: "IronPythonTests/TestResults"
   test_report_pattern:
     format: "junit"
     pattern: "*.xml"
+
+code_analysis:
+  sonarqube:
+    useDotnetSonarScanner: true
+    scanOnAnyBranch: true
+    coverage_reports:
+      - coverage.xml
 
 soc2:
   harmony:
