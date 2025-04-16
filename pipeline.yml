@@ -57,7 +57,12 @@ deployment:
     publish_to_jenkins: true
     publish_to_artifactory: false
     publish_to_package_manager: true
+<<<<<<< HEAD
     use_dev_pm: false
     allow_branches: ".*"
+=======
+    scripts:
+      - "pwsh.exe -ExecutionPolicy ByPass -Command Compress-Archive -Path .\\package_output\\DSIronPython -DestinationPath .\\DSIronPythonPackage.zip"
+>>>>>>> 057f8c0ee887a3d0d3a971ee46c67853d2f7b449
     outputs:
       - "DSIronPythonPackage.zip"
