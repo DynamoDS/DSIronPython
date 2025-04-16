@@ -60,6 +60,5 @@ deployment:
     publish_to_package_manager: true
     scripts:
       - "pwsh.exe -ExecutionPolicy ByPass -Command Compress-Archive -Path .\\package_output\\DSIronPython -DestinationPath .\\DSIronPythonPackage.zip"
-    package_version: 1.0.${env.BUILD_NUMBER}
     outputs:
       - "DSIronPythonPackage.zip"
