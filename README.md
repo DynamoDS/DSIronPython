@@ -1,5 +1,7 @@
 # DSIronPython
 
+[![Build Status](https://c007.cloudbees-ci.autodesk.com/buildStatus/icon?job=DYNCI%2FDynamo%2FDSIronPython%2Fmaster)](https://c007.cloudbees-ci.autodesk.com/job/DYNCI/job/Dynamo/job/DSIronPython/job/master/)
+
 Contains the DSIronPython package for using the legacy IronPython2 engine in Dynamo.
 Building this soluton will produce a dynamo package containing the python engine and an extension to load it.
 This repo is a WIP.
